@@ -30313,10 +30313,11 @@
 		<attribute key="description" value="It is frosted with tiny ice crystals and starts to melt as look at it." />
 	</item>
 	<item id="21584" article="a" name="reward chest">
+		<attribute key="type" value="rewardchest" />
 		<attribute key="description" value="This chest contains your rewards earned in battles." />
 		<attribute key="containersize" value="32" />
-		<attribute key="pickupable" value="0" />
-		<attribute key="moveable" value="0" />
+	 	<attribute key="pickupable" value="0" />
+	  	<attribute key="moveable" value="0" />		
 	</item>
 	<item id="21585" article="a" name="smoking coal">
 		<attribute key="description" value="This coal is smoking and emmits quite a stench." />

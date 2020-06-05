@@ -4,6 +4,7 @@
 	<look type="229" corpse="6078" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
+		<flag rewardboss="1" />
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
@@ -82,7 +83,7 @@
 		<voice sentence="Even in my weakened state I will crush you all!" />
 	</voices>
 	<loot>
-		<item name="Ferumbras' hat" chance="100000" />
+		<item name="Ferumbras' hat" chance="100000" unique="1"/>
 		<item name="gold coin" countmax="100" chance="97000" />
 		<item name="gold coin" countmax="100" chance="97000" />
 		<item name="gold coin" countmax="70" chance="33000" />
@@ -107,8 +108,6 @@
 		<item name="havoc blade" chance="16000" />
 		<item name="shadow sceptre" chance="16000" />
 		<item name="small emerald" countmax="100" chance="16000" />
-		<item id="7632" countmax="5" chance="14000" /><!-- giant shimmering pearl -->
-		<item id="7633" countmax="5" chance="14000" /><!-- giant shimmering pearl -->
 		<item name="magic plate armor" chance="14000" />
 		<item name="mastermind shield" chance="14000" />
 		<item name="runed sword" chance="14000" />
@@ -141,5 +140,12 @@
 		<item name="red tome" chance="4000" />
 		<item name="small diamond" countmax="82" chance="4000" />
 		<item name="small ruby" countmax="92" chance="4000" />
+
+		<item id="7632" countmax="5" chance="14000" /><!-- giant shimmering pearl -->
+		<item id="7633" countmax="5" chance="14000" /><!-- giant shimmering pearl -->
+		<item id="2393" chance="16060" /><!-- giant sword -->
+		<item id="2171" chance="30000" /><!-- platinum amulet -->
+		<item id="2678" countmax="3" chance="20000" /><!-- coconut -->
+		<item id="2151" countmax="4" chance="12000" /><!-- talon -->
 	</loot>
 </monster>

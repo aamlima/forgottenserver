@@ -34,6 +34,7 @@ struct LootBlock {
 	int32_t subType;
 	int32_t actionId;
 	std::string text;
+	bool unique;
 
 	std::vector<LootBlock> childLoot;
 	LootBlock() {
@@ -43,6 +44,7 @@ struct LootBlock {
 
 		subType = -1;
 		actionId = -1;
+		unique = false;
 	}
 };
 
@@ -149,6 +151,7 @@ class MonsterType
 		bool canPushCreatures = false;
 		bool pushable = true;
 		bool isSummonable = false;
+		bool isRewardBoss = false;
 		bool isIllusionable = false;
 		bool isConvinceable = false;
 		bool isAttackable = true;
