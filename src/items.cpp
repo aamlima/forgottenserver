@@ -146,7 +146,6 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
 	{"walkstack", ITEM_PARSE_WALKSTACK},
 	{"blocking", ITEM_PARSE_BLOCKING},
 	{"allowdistread", ITEM_PARSE_ALLOWDISTREAD},
-	{"rewardchest", ITEM_PARSE_REWARDCHEST},
 };
 
 const std::unordered_map<std::string, ItemTypes_t> ItemTypesMap = {
@@ -160,6 +159,7 @@ const std::unordered_map<std::string, ItemTypes_t> ItemTypesMap = {
 	{"door", ITEM_TYPE_DOOR},
 	{"bed", ITEM_TYPE_BED},
 	{"rune", ITEM_TYPE_RUNE},
+	{"rewardchest", ITEM_TYPE_REWARDCHEST},
 };
 
 const std::unordered_map<std::string, tileflags_t> TileStatesMap = {
@@ -597,11 +597,6 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 					} else {
 						std::cout << "[Warning - Items::parseItemNode] Unknown type: " << valueAttribute.as_string() << std::endl;
 					}
-					break;
-				}
-				
-				case ITEM_PARSE_REWARDCHEST: {
-					it.type = ITEM_TYPE_REWARDCHEST;
 					break;
 				}
 
