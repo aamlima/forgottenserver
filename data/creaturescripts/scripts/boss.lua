@@ -125,41 +125,41 @@ function onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified,
 		end
 
 		local participants = 0
-		for _, con in ipairs(scores) do
-			local score = (con.damageOut / totalDamageOut) + (con.damageIn / totalDamageIn) + (con.healing / totalHealing)
-			con.score = score / 3 -- normalize to 0-1
-			if score ~= 0 then
+		for _, score in ipairs(scores) do
+			local scoreValue = (score.damageOut / totalDamageOut) + (score.damageIn / totalDamageIn) + (score.healing / totalHealing)
+			score.value = scoreValue / 3 -- normalize to 0-1
+			if scoreValue ~= 0 then
 				participants = participants + 1
 			end
 		end
-		table.sort(scores, function(a, b) return a.score > b.score end)
+		table.sort(scores, function(a, b) return a.value > b.value end)
 
 		local expectedScore = 1 / participants
 
-		for _, con in ipairs(scores) do
+		for rank, score in ipairs(scores) do
 			local reward, stamina -- ignoring stamina for now because I heard you receive rewards even when it's depleted   
-			if con.player then   
-				reward = con.player:getReward(timestamp, true)
-				stamina = con.player:getStamina()
+			if score.player then   
+				reward = score.player:getReward(timestamp, true)
+				stamina = score.player:getStamina()
 			else
-				stamina = con.stamina or 0
+				stamina = score.stamina or 0
 			end
 
 			local playerLoot
-			if --[[stamina > 840 and]] con.score ~= 0 then
+			if --[[stamina > 840 and]] score.value ~= 0 then
 				local lootFactor = 1
 				lootFactor = lootFactor / participants ^ (1 / 3) -- tone down the loot a notch if there are many participants
-				lootFactor = lootFactor * (1 + lootFactor) ^ (con.score / expectedScore) -- increase the loot multiplicatively by how many times the player surpassed the expected score
-				playerLoot = monsterType:getBossReward(lootFactor, _ == 1)
+				lootFactor = lootFactor * (1 + lootFactor) ^ (score.value / expectedScore) -- increase the loot multiplicatively by how many times the player surpassed the expected score
+				playerLoot = monsterType:getBossReward(lootFactor, rank == 1)
 
-				if con.player then
+				if score.player then
 					for _, p in ipairs(playerLoot) do
 						reward:addItem(p[1], p[2])
 					end
 				end
 			end
 
-			if con.player then
+			if score.player then
 				local lootMessage = {"The following items are available in your reward chest: "}
 
 				if --[[stamina > 840]]true then
@@ -168,9 +168,9 @@ function onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified,
 					table.insert(lootMessage, 'nothing (due to low stamina)')
 				end
 				table.insert(lootMessage, ".")
-				con.player:sendTextMessage(MESSAGE_EVENT_ADVANCE, table.concat(lootMessage))
+				score.player:sendTextMessage(MESSAGE_EVENT_ADVANCE, table.concat(lootMessage))
 			else
-				insertRewardItems(con.guid, timestamp, playerLoot)
+				insertRewardItems(score.guid, timestamp, playerLoot)
 			end
 		end
 

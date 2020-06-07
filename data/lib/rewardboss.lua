@@ -97,7 +97,7 @@ end
 -- by https://otland.net/members/cbrm.25752/ with some modifications
 function MonsterType.createLootItem(self, lootBlock, chance, lootTable)
 	local lootTable, itemCount = lootTable or {}, 0
-	local randvalue = math.random(0, 100000) / (configManager.getNumber("rateLoot") * chance)
+	local randvalue = math.random(0, 100000) / (configManager.getNumber(configKeys.RATE_LOOT) * chance)
 	if randvalue < lootBlock.chance then
 		if (ItemType(lootBlock.itemId):isStackable()) then
 			itemCount = randvalue % lootBlock.maxCount + 1
@@ -116,15 +116,15 @@ function MonsterType.createLootItem(self, lootBlock, chance, lootTable)
 end
 
 function MonsterType.getBossReward(self, lootFactor, topScore)
-	local result = {}
-	if configManager.getNumber("rateLoot") > 0 then
+	local lootTable = {}
+	if configManager.getNumber(configKeys.RATE_LOOT) > 0 then
 		for _, lootBlock in pairs(self:getLoot()) do
 			if lootBlock.unique and not topScore then
 				--continue
 			else
-				self:createLootItem(lootBlock, lootFactor, result)
+				self:createLootItem(lootBlock, lootFactor, lootTable)
 			end
 		end
 	end
-	return result
+	return lootTable
 end

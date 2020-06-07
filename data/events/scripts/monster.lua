@@ -3,8 +3,18 @@ function Monster:onDropLoot(corpse)
 		return
 	end
 
-	local player = Player(corpse:getCorpseOwner())
 	local mType = self:getType()
+
+	if mType:isRewardBoss() then
+		local timestamp = os.time()
+		corpse:setAttribute(ITEM_ATTRIBUTE_CORPSEOWNER, 2^31 - 1)
+		if not corpse:addRewardContainer(timestamp) then
+			error("Failed to add reward container to boss corpse.")
+		end
+		return
+	end
+
+	local player = Player(corpse:getCorpseOwner())
 	if not player or player:getStamina() > 840 then
 		local monsterLoot = mType:getLoot()
 		for i = 1, #monsterLoot do
