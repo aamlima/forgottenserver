@@ -2178,6 +2178,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Container", "addItemEx", LuaScriptInterface::luaContainerAddItemEx);
 	registerMethod("Container", "getCorpseOwner", LuaScriptInterface::luaContainerGetCorpseOwner);
 
+	registerMethod("Container", "addRewardContainer", LuaScriptInterface::luaContainerAddRewardContainer);
+
 	// Teleport
 	registerClass("Teleport", "Item", LuaScriptInterface::luaTeleportCreate);
 	registerMetaMethod("Teleport", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -6789,6 +6791,30 @@ int LuaScriptInterface::luaContainerGetContentDescription(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+int LuaScriptInterface::luaContainerAddRewardContainer(lua_State* L)
+{
+	// container:addRewardContainer(timestamp)
+	Container* container = getUserdata<Container>(L, 1);
+	if (!container) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	uint32_t timestamp = getNumber<uint32_t>(L, 2, 0);
+	if(timestamp == 0){
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Item* rewardContainer = Item::CreateItem(ITEM_REWARD_CONTAINER);
+	rewardContainer->setIntAttr(ITEM_ATTRIBUTE_DATE, timestamp);	
+	container->setIntAttr(ITEM_ATTRIBUTE_DATE, timestamp);
+	container->internalAddThing(rewardContainer);
+	pushBoolean(L, true);
+
 	return 1;
 }
 
