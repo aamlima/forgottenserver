@@ -6,9 +6,7 @@ function Monster:onDropLoot(corpse)
 	local mType = self:getType()
 
 	if mType:isRewardBoss() then
-		local timestamp = os.time()
-		corpse:setAttribute(ITEM_ATTRIBUTE_CORPSEOWNER, 2^31 - 1)
-		if not corpse:addRewardContainer(timestamp) then
+		if not corpse:addRewardContainer() then
 			error("Failed to add reward container to boss corpse.")
 		end
 		return

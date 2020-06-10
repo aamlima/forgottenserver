@@ -6796,23 +6796,20 @@ int LuaScriptInterface::luaContainerGetContentDescription(lua_State* L)
 
 int LuaScriptInterface::luaContainerAddRewardContainer(lua_State* L)
 {
-	// container:addRewardContainer(timestamp)
+	// container:addRewardContainer()
 	Container* container = getUserdata<Container>(L, 1);
 	if (!container) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	uint32_t timestamp = getNumber<uint32_t>(L, 2, 0);
-	if(timestamp == 0){
-		lua_pushnil(L);
-		return 1;
-	}
-
+	auto timestamp = time(nullptr);
 	Item* rewardContainer = Item::CreateItem(ITEM_REWARD_CONTAINER);
 	rewardContainer->setIntAttr(ITEM_ATTRIBUTE_DATE, timestamp);	
 	container->setIntAttr(ITEM_ATTRIBUTE_DATE, timestamp);
 	container->internalAddThing(rewardContainer);
+	container->setRewardCorpse();
+	container->startDecaying();
 	pushBoolean(L, true);
 
 	return 1;
