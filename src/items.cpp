@@ -222,7 +222,7 @@ Items::Items()
 void Items::clear()
 {
 	items.clear();
-	reverseItemMap.clear();
+	clientIdToServerIdMap.clear();
 	nameToItems.clear();
 }
 
@@ -406,7 +406,7 @@ bool Items::loadFromOtb(const std::string& file)
 			}
 		}
 
-		reverseItemMap.emplace(clientId, serverId);
+		clientIdToServerIdMap.emplace(clientId, serverId);
 
 		// store the found item
 		if (serverId >= items.size()) {
@@ -1362,9 +1362,10 @@ const ItemType& Items::getItemType(size_t id) const
 
 const ItemType& Items::getItemIdByClientId(uint16_t spriteId) const
 {
-	auto it = reverseItemMap.find(spriteId);
-	if (it != reverseItemMap.end()) {
-		return getItemType(it->second);
+	if (spriteId >= 100) {
+		if (uint16_t serverId = clientIdToServerIdMap.getServerId(spriteId)) {
+			return getItemType(serverId);
+		}
 	}
 	return items.front();
 }

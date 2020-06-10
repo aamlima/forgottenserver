@@ -8660,7 +8660,7 @@ int LuaScriptInterface::luaPlayerSetGuildLevel(lua_State* L)
 		return 1;
 	}
 
-	const GuildRank* rank = player->getGuild()->getRankByLevel(level);
+	GuildRank_ptr rank = player->getGuild()->getRankByLevel(level);
 	if (!rank) {
 		pushBoolean(L, false);
 	} else {
@@ -10377,7 +10377,7 @@ int LuaScriptInterface::luaGuildGetRankById(lua_State* L)
 	}
 
 	uint32_t id = getNumber<uint32_t>(L, 2);
-	GuildRank* rank = guild->getRankById(id);
+	GuildRank_ptr rank = guild->getRankById(id);
 	if (rank) {
 		lua_createtable(L, 0, 3);
 		setField(L, "id", rank->id);
@@ -10399,7 +10399,7 @@ int LuaScriptInterface::luaGuildGetRankByLevel(lua_State* L)
 	}
 
 	uint8_t level = getNumber<uint8_t>(L, 2);
-	const GuildRank* rank = guild->getRankByLevel(level);
+	GuildRank_ptr rank = guild->getRankByLevel(level);
 	if (rank) {
 		lua_createtable(L, 0, 3);
 		setField(L, "id", rank->id);
@@ -15068,6 +15068,11 @@ int LuaScriptInterface::luaMoveEventRegister(lua_State* L)
 	// moveevent:register()
 	MoveEvent* moveevent = getUserdata<MoveEvent>(L, 1);
 	if (moveevent) {
+		if ((moveevent->getEventType() == MOVE_EVENT_EQUIP || moveevent->getEventType() == MOVE_EVENT_DEEQUIP) && moveevent->getSlot() == SLOTP_WHEREEVER) {
+			uint32_t id = moveevent->getItemIdRange().at(0);
+			ItemType& it = Item::items.getItemType(id);
+			moveevent->setSlot(it.slotPosition);
+		}
 		if (!moveevent->isScripted()) {
 			pushBoolean(L, g_moveEvents->registerLuaFunction(moveevent));
 			return 1;
