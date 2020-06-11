@@ -115,7 +115,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		} else {
 			output->addByte(0);
 		}
-		output->addString(character);
+		output->addString(IOLoginData::getCheckPlayerLevel(character));
 	}
 
 	//Add premium days

@@ -175,6 +175,58 @@ uint32_t IOLoginData::getAccountIdByPlayerName(const std::string& playerName)
 	return result->getNumber<uint32_t>("account_id");
 }
 
+std::string IOLoginData::getCheckPlayerLevel(const std::string& playerName)
+{
+	Database& db = Database::getInstance();
+
+	std::ostringstream query;
+	query << "SELECT `level`, `vocation` FROM `players` WHERE `name` = " << db.escapeString(playerName);
+	DBResult_ptr result = db.storeQuery(query.str());
+	if (!result) {
+		return "";
+	}
+
+    const uint32_t pLevel = result->getNumber<uint32_t>("level");
+    const uint32_t pVoc = result->getNumber<uint32_t>("vocation");
+    std::string voc;
+
+	switch (pVoc) {
+		case 0:
+			voc = "None";
+			break;
+		case 1:
+			voc = "Sorcerer";
+			break;
+		case 2:
+			voc = "Druid";
+			break;
+		case 3:
+			voc = "Paladin";
+			break;
+		case 4:
+			voc = "Knight";
+			break;
+		case 5:
+			voc = "Master Sorcerer";
+			break;
+		case 6:
+			voc = "Elder Druid";
+			break;
+		case 7:
+			voc = "Royal Paladin";
+			break;
+		case 8:
+			voc = "Elite Knight";
+			break;
+		default:
+			voc = "Unknown";
+	}
+
+    std::stringstream ret;
+    ret << playerName << " - " << voc << "(" << pLevel << ")";
+    return ret.str();
+}
+
 AccountType_t IOLoginData::getAccountType(uint32_t accountId)
 {
 	std::ostringstream query;
