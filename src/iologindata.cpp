@@ -223,7 +223,7 @@ std::string IOLoginData::getCheckPlayerLevel(const std::string& playerName)
 	}
 
     std::stringstream ret;
-    ret << playerName << " - " << voc << "(" << pLevel << ")";
+    ret << voc << "(" << pLevel << ")";
     return ret.str();
 }
 
